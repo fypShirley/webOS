@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="css/cadc.css"/>
+  <link rel="stylesheet" href="css/font-awesome.min.css"/>
+  <style>
+    ul{padding: 0}
+    .bg{background-color: #ccc;  filter:alpha(opacity=50);/*IE*/  opacity:0.5;/*FF*/  z-index:999;  position:absolute;/*IE6*/  width: 80px;  height: 101px;  left: 0;  top: 0;  }
+    .function-box{  cursor: pointer;  width: 80px;  text-align: center;  padding: 15px 0;  }
+    .no-show{  display: none;  }
+    .account{margin:0 10px;}
+    .account-inner{padding: 0 10px;display: inline-block;}
+    .border{border-left: 1px solid #2a3a4e;border-right: 1px solid #2a3a4e  }
+    .account-inner:hover{  background: #2a3a4e;  }
+    .imgClass body{text-align: center;}
+    .icon{width: 90px;height:39px;margin-left: 20px;display: inline-block}
+    .icon-copy{width: 90px;height:39px;margin-left: 20px;display: inline-block}
+    .icon-init{background: url("images/icon.png") no-repeat 0 -40px;}
+    .icon-active{background: url("images/icon.png") no-repeat 0 -80px;}
+    .icon:hover{background: url("images/icon.png") no-repeat 0 0;}
+    /*内框样式*/
+    #functions{
+      position: absolute;
+      left:20px;
+      border: 1px solid #ececec;
+      background: #fff;
+      padding: 20px;
+      overflow: hidden;
+      text-align: center;
+      width: 260px;
+      z-index: 1000;
+      cursor: default;
+    }
+    /*外框样式*/
+    #fun{  overflow: hidden;  height: auto;  width:340px;  position:absolute;  top: 39px;  left: 0;  }
+    .function{position: relative;}
+  </style>
+</head>
+<body style="width: 100%;height:100%;overflow:hidden;" id="deskTop">
+<div id="nav" class="nav">
+  <div class="function">
+    <div id="icon" class="icon icon-init"></div>
+    <div class="functions" id="fun" >
+      <ul id="functions" class="no-show"></ul>
+      <table style="clear: both"></table>
+    </div>
+  </div>
+  <div id="controlBomb" class="lf"></div>
+
+</div>
+<div id="web"  class="desk" ondrop="drop_change(event)" ondragover="allowDrop(event)" style="height: 895px">
+  <div id="web_desk" style="height: 100%"></div>
+</div>
+<div class="del-box none" id="delBox">
+  删除快捷方式
+</div>
+<script src="js/jquery-1.11.3.js"></script>
+<script src="js/cadcDesk.js"></script>
+<script>
+  var arr = [{icon: 'images/1.png', title: '功能1', id: '1'},
+    {icon: 'images/2.png', title: '功能2', id: '2'},
+    {icon: 'images/3.png', title: '功能3', id: '3'},
+    {icon: 'images/4.png', title: '功能4', id: '4'},
+    {icon: 'images/5.png', title: '功能5', id: '5'},
+    {icon: 'images/6.png', title: '功能6', id: '6'},
+    {icon: 'images/7.png', title: '功能7', id: '7'},
+    {icon: 'images/8.png', title: '功能8', id: '8'},
+    {icon: 'images/9.png', title: '功能9', id: '9'},
+    {icon: 'images/10.png', title: '功能10', id: '10'},
+    {icon: 'images/11.png', title: '功能11', id: '11'},
+    {icon: 'images/12.png', title: '功能12', id: '12'},
+  ];
+  var desk_arr = [{icon: 'images/1.png', title: '功能1', id: '1'},
+    {icon: 'images/2.png', title: '功能2', id: '2'},
+    {icon: 'images/3.png', title: '功能3', id: '3'},
+    {icon: 'images/4.png', title: '功能4', id: '4'},
+    {icon: 'images/5.png', title: '功能5', id: '5'},
+    {icon: 'images/6.png', title: '功能6', id: '6'}
+  ];
+  /*所有应用*/
+  var icon=$('#icon');
+  var bool=false;
+  var functions = $('#functions');
+  var nav=$('#nav');
+  var web_desk=$('#web_desk');
+  var height;
+  $(function () {
+    load(7);
+    desk();
+  });
+  /*拖拽函数*/
+  function allowDrop(ev) {
+    ev.preventDefault();
+  }
+  /*这是拖拽函数*/
+  function drag(ev) {
+    ev.dataTransfer.setData("Text", ev.target.id);
+  }
+
+  /*桌面图标的拖拽*/
+  function drag_change(ev) {
+    ev.dataTransfer.setData("Text", ev.target.id);
+  }
+  function drop_change(ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    /*目标元素id*/
+    var data = ev.dataTransfer.getData("Text");
+    var id = '#' + data;
+    var target_data = $(id).data('list');
+
+    var elm = ev.target.id;
+    var elm_data = $('#' + elm).data('list');
+    var index_target, index_elm;
+    /*如果拖拽的位置是空白位置*/
+    if (elm == 'web_desk') {
+      libraryDie();//从功能库里拖出来
+      desk_arr = desk_arr.filter(function (x) {
+        return x.id != data;
+      });
+      desk_arr.push(target_data);
+    } else {
+      $.each(desk_arr, function (i, list) {
+        if (list.id == data) {
+          index_target = i;
+        }
+        if (list.id == elm) {
+          index_elm = i;
+        }
+      });
+      desk_arr[index_target] = elm_data;
+      desk_arr[index_elm] = target_data;
+    }
+    desk();
+  }
+  /*加载功能函数库*/
+  function load(n) {
+    functions.html('');
+    $.each(arr, function (i, list) {
+      var div = $('<li style="width: 100px;height: 100px;position: static;float: left" class="function-box" id="' + list.id + '" draggable="true" ondragstart="drag(event)"></li>');
+        div.on('click',function(){
+          functions.animate({'top':-height},'fast',function(){
+            $('#fun').addClass('no-show');
+          });
+          bool=false;
+          icon.addClass('icon-init').removeClass('icon-active').removeClass('icon-copy').addClass('icon');
+          creatWindow(this);
+        });
+        div.data('list', list);
+        div[0].list = list;
+      div.append('<div><img id="' + list.id + '" src="' + list.icon + '"></div><div>' + list.title + '</div>');
+      functions.append(div);
+    });
+    var width = $(window).width() * 0.3;
+    $('.functions').css('z-index', 100);
+    height = functions.height()+50;
+    functions.css('top',-height).removeClass('no-show');
+    $('#fun').addClass('no-show').height(height);
+  }
+
+
+  /*加载桌面图标*/
+  function desk(n) {
+    //    宽度一致
+    var width=$('#width .account-inner').width();
+    $('#out').width(width);
+    web_desk.html('');
+    var top_value = 15;
+    var left_value = 20;
+    var window_height = $(window).height() - 128;
+    $.each(desk_arr, function (i, list) {
+      var div = $('<div class="function-box" id="' + list.id + '"  draggable="true" ondragstart="drag_change(event)" ondrop="drop_change(event)" ondragover="allowDrop(event)"></div>');
+      div[0].list =  list;
+      div.on('click',function(){
+        creatWindow(this);
+      });
+
+
+      div.css('top', top_value).css('left', left_value)
+      div.append('<img  id="' + list.id + '" src="' + list.icon + '"><div style="padding: 5px 0;font-size: 13px;height: 30px;color: #eee" id="' + list.id + '">' + list.title + '</div>');
+      div.append('<div  class="op" id="' + list.id + '"></div>')
+      top_value += 100;
+
+      if (top_value > window_height) {
+        top_value = 15;
+        left_value += 100;
+      }
+      web_desk.append(div);
+    });
+  }
+
+  /*功能菜单的显示与隐藏 */
+  icon.click(function () {
+    $('#fun').removeClass('no-show');
+    if (bool) {
+      libraryDie();
+    } else {
+      icon.addClass('icon-active').removeClass('icon-init').removeClass('icon').addClass('icon-copy');
+      functions.animate({'top':0},'fast');
+      bool=true;
+    }
+  });
+
+
+  /*右键删除功能*/
+  web_desk.on('contextmenu', '.function-box', function (e) {
+    e.preventDefault();
+    var id = $(this).attr('id');
+    var top = $(this).css('top').slice(0, -2);
+    var left = $(this).css('left').slice(0, -2);
+    $('#delBox').data('id', id).removeClass('none').css('left', Number(left) + 50).css('top', Number(top) + 80);
+  });
+  /*删除快捷方式*/
+  $('#delBox').click(function () {
+    var id = $(this).data('id');
+    desk_arr = desk_arr.filter(function (x) {
+      return x.id != id;
+    });
+    desk();
+    $(this).addClass('none');
+  });
+
+  /*去除删除方式*/
+  $(document).click(function () {
+    $('#delBox').addClass('none')
+  });
+
+  /*窗口大小变化事件*/
+  $(window).resize(function () {
+    var height,width;
+    width = window.innerWidth;
+    height = window.innerHeight;
+    whChange();
+    if(current){
+      if(current.fullScreen){
+        current.height(height);
+        current.next.height(height);
+        current.width(width);
+        current.next.width(width);
+      }
+    }
+  });
+  function enter(ev){
+    $(ev.target).find('.op').css('borderBottom','2px solid #000').removeClass('bg');
+  }
+  function leave(ev){
+    $(this).attr('ondragenter','enter(ev)')
+    $(ev.target).find('.op').css('borderBottom','none').removeClass('bg')
+  }
+  /*点击桌面其他部分*/
+  nav.on('click','',function(e){
+    if(e.target.id=='nav'){
+      libraryDie();
+    }
+  });
+  web_desk.click(libraryDie);
+
+  function libraryDie(){
+    functions.animate({'top':-height},'fast',function(){
+      $('#fun').addClass('no-show');
+    });
+    bool=false;
+    icon.addClass('icon-init').removeClass('icon-active').removeClass('icon-copy').addClass('icon');
+  }
+</script>
+</body>
+</html>

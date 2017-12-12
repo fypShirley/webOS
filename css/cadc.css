@@ -1,0 +1,124 @@
+/*nav*/
+img {vertical-align:top;}
+.function{float:left;}
+#controlBomb>.bombIcon:first-child{margin-left:5px;}
+.bombIcon{
+  cursor:pointer;float:left;width:60px;box-sizing: border-box;
+  height:39px;position:relative;padding-top:5px;text-align: center;
+  border-left:1px solid #485A70 ;
+  border-right:1px solid #485A70 ;
+  box-shadow:0 -2px 5px #0A1F39;
+  margin: 0 1px;
+}
+.bombIcon>img{width:28px;}
+.bombIcon:hover{background: rgba(0,0,0,0.2);}
+.bombIcon:active{background: rgba(0,0,0,0.2);}
+.bombIcon:hover .fa{padding:3px;font-size:6px;color:#fff;display: block;background:#B81D27;border-radius: 50%}
+.bombIcon>i{position:absolute;top:0;right:0;cursor:pointer;display:none;}
+/*桌面*/
+body{ margin: 0;  background: #3d6eb0;color:#252D38;width: 100%;height: 100%;overflow: hidden;}
+li{  list-style: none; }
+.lf{  float: left;  }
+.rt{  float: right;  }
+ul{margin: 0}
+.over{overflow: hidden}
+.none{display: none}
+.nav{  background: #2d415a;position: fixed;top:0;left:0;right:0;z-index: 9999;height: 39px;line-height: 39px}
+.function{color: #999;cursor: pointer}
+.function-box{position: absolute}
+.function-box div{text-align: center}
+.function-box img{height: 50px;width: 50px}
+.desk{padding:20px;position: relative;margin-top:39px;  }
+.del-box{
+  border:1px solid #ececec;
+  background: #ececec;
+  position: absolute;
+  font-size: 12px;
+  top: 30px;
+  left: 0;
+  color: #999;
+  padding:5px 10px;
+  cursor: pointer;
+}
+@media screen and (max-width: 800px) {
+  .functions{
+    height: 100%;
+  }
+}
+@media screen and (min-width: 1500px) {
+  .functions{
+    height: 40%;
+  }
+}
+/*弹框*/
+.notShow{display: none;}/*显示*/
+.activeNav{background: rgba(0,0,0,0.2);}
+.activeWin{z-index: 999;}
+.allWindow{position:absolute;background:transparent;  }
+.window-left,.window-right{
+  overflow:hidden;width:2px;position: absolute;
+  top:0;bottom:0;background:transparent;z-index: 1000;
+}
+.window-top,.window-bottom{
+  overflow:hidden;height:2px;position: absolute;
+  left:0;right:0;background:transparent;z-index: 1000;
+}
+
+.window-left{left: 0;cursor:w-resize;}
+.window-right{right: 0;cursor:e-resize;}
+.window-top{top: 0;cursor:n-resize;}
+.window-bottom{bottom: 0;cursor:s-resize;}
+/*4角*/
+.window-leftTop,
+.window-rightTop,
+.window-leftBottom,
+.window-rightBottom{
+  z-index:1001;width:10px;height:10px;
+  position: absolute;background:transparent;
+}
+.window-leftBottom,.window-rightTop{cursor: sw-resize}
+.window-rightBottom{cursor:se-resize;right:0;bottom: 0;/*width: 22px;height:0px;*/}
+.window-leftBottom{cursor:sw-resize;left:0;bottom: 0;}
+.window-leftTop{cursor:nw-resize;left:0;top: 0;}
+.window-rightTop{cursor:ne-resize;right:0;top: 0;}
+
+.window-container{ box-sizing: border-box;}
+.window-content{background-color: #fff;
+  border-left:  1px solid #E1E6EB;
+  border-right:  1px solid #E1E6EB;
+  border-bottom:  1px solid #E1E6EB;
+}
+
+/*icon,title*/
+.win-con-top{
+  height:30px;line-height:30px;
+  background-image:linear-gradient(#dde2e7,#ffffff);
+  border: 1px solid #E1E6EB;box-sizing: border-box;
+
+}
+.win-con-top.winActive{background-image:linear-gradient(#ffffff,#3d6eb0);}
+.win-con-top .title{
+  text-align:left;font-size: 14px;white-space: nowrap;
+  vertical-align: top;cursor: move;color: #fff;margin-left: 30px;
+}
+.win-con-top .winIcon{
+  width: 20px;height: 20px;position: absolute;
+  top:0;left:0;bottom: 0;padding: 5px;
+}
+.win-con-top .winIcon>img { width:100%;height: 100%;}
+/*按钮*/
+.buttons{position:absolute;top:0;right:0;}
+.win-con-top .buttons a:hover{color:#2A588C;}
+.win-con-top .buttons .win-close-btn:hover{color: rgba(185, 29, 39, 0.8);}
+
+.win-con-top .buttons .win-min-btn,
+.win-con-top .buttons .win-max-btn,
+.win-con-top .buttons .win-max-reg,
+.win-con-top .buttons .win-close-btn{
+  width:19px;height:100%;display: block;float: left;
+  padding-left:7px;padding-right:2px;cursor: pointer;color: #fff;
+}
+.win-con-top .buttons .winBtnSet{float: left;}
+/*.window-container{border: 1px solid #b0c6e4}*/
+
+.modleBlock{position:absolute;top:0;left:0;right:0;bottom:0;background:#000;opacity:0;z-index:10000;}
